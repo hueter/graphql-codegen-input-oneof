@@ -1,8 +1,11 @@
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
+import { ApolloClient, InMemoryCache, gql, HttpLink } from '@apollo/client';
+import { ApolloProvider, useQuery } from '@apollo/client/react';
 import './App.css';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  link: new HttpLink({
+    uri: 'http://localhost:4000/graphql',
+  }),
   cache: new InMemoryCache(),
 });
 
@@ -16,8 +19,18 @@ const SEARCH_QUERY = gql`
   }
 `;
 
+interface SearchResult {
+  id: string;
+  name: string;
+  category: string;
+}
+
+interface SearchData {
+  search: SearchResult[];
+}
+
 function SearchComponent() {
-  const { loading, error, data } = useQuery(SEARCH_QUERY, {
+  const { loading, error, data } = useQuery<SearchData>(SEARCH_QUERY, {
     variables: {
       filter: { byCategory: 'Electronics' }
     }
@@ -25,12 +38,13 @@ function SearchComponent() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+  if (!data) return null;
 
   return (
     <div>
       <h2>Search Results (Electronics)</h2>
       <ul>
-        {data.search.map((item: any) => (
+        {data.search.map((item) => (
           <li key={item.id}>
             {item.name} - {item.category}
           </li>
