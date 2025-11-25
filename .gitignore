@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.env
+
+# Rails
+server/tmp/
+server/log/
+server/.bundle/
+server/db/*.sqlite3
+server/config/master.key
+server/storage/

@@ -1,0 +1,26 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Mutation {
+  """An example field added by the generator"""
+  testField: String!
+}
+
+type Query {
+  search(filter: SearchFilterInput!): [SearchResult!]!
+}
+
+"""Example input type using @oneOf directive"""
+input SearchFilterInput {
+  byCategory: String
+  byId: ID
+  byName: String
+}
+
+type SearchResult {
+  category: String!
+  id: ID!
+  name: String!
+}
